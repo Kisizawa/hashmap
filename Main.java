@@ -1,8 +1,5 @@
-package hashmap;
-
 import java.util.HashMap;
 import java.util.Scanner;
-
 
 public class Main {
 		static String accountName;
@@ -10,12 +7,16 @@ public class Main {
 		static double accountNum;
 		static String Name;
 		static boolean ui=true;
-		
+		static //key名前 valueアカウント番号
+				HashMap<String,Integer> account =new HashMap<String,Integer>();
+		static		//keyアカウント番号　vlue預金金額
+				HashMap<Integer,Integer> accountmoney=new HashMap<Integer,Integer>();
+				
 	public static void main(String[] args) {
 		while(ui=true) {
 		Start();
 		int a=new java.util.Scanner(System.in).nextInt();
-		selectaNum(a);
+		Set(a);
 		}
 		
 
@@ -27,12 +28,13 @@ public class Main {
 		
 	}
 	
-	public static void Set() {
-		HashMap<String,Integer> account =new HashMap<String,Integer>();
-		HashMap<Integer,Integer> accountmoney=new HashMap<Integer,Integer>();
+	public static int Set(int a) {
+	//例外処理
+	try {
+		if(a==1) {
 		System.out.println("アカウントを作成します\n名前を教えてください");
 		String accountName=new java.util.Scanner(System.in).nextLine();
-		accountNum=Math.random()*9999;
+		accountNum=Math.random()*8999+1000;
 		
 		account.put(accountName,(int)accountNum);
 		
@@ -41,33 +43,73 @@ public class Main {
 		money=new java.util.Scanner(System.in).nextInt();
 		
 		accountmoney.put((int)accountNum, money);
-		
-		System.out.println("アカウントの名前を教えてください");
-		Name=new java.util.Scanner(System.in).nextLine();
-		System.out.println("あなたのアカウント番号は"+account.get(Name));
-		System.out.println("あなたのアカウントの預金は"+accountmoney.get((int)accountNum));
-		
-		
-	}
-	
-	public static int selectaNum(int a) {
-		if(a==1) {
-			
-			Set();
-		}else if(a==2) {
-			System.out.println("預金の確認をします");
-			
-		}else if(a==3) {
-			System.out.println("預金の預け入れをします");
-		}else if(a==4) {
-			System.out.println("預金の引き出しをします");
-		}else {
-			Start();
-			
 		}
 		
-		return a;
+		if(a==2) {
+			System.out.println("預金の確認をします");
+			System.out.println("まず名前を教えてください");
+			Name=new java.util.Scanner(System.in).nextLine();
+			//アカウント番号抽出
+			System.out.println("あなたのアカウント番号を教えてください");
+			int accountnum=new java.util.Scanner(System.in).nextInt();
+			//アカウント番号を教えてもらう
+			if((int)account.get(Name)==accountnum) {
+				System.out.println("あなたのアカウントの預金は"+accountmoney.get((int)accountnum));
+			}
+		}
+			
+			
+			
+		if(a==3) {
+			System.out.println("預金の預け入れをします");
+			
+			System.out.println("まず名前を教えてください");
+			Name=new java.util.Scanner(System.in).nextLine();
+			//アカウント番号抽出
+			System.out.println("あなたのアカウント番号を教えてください");
+			int accountnum2=new java.util.Scanner(System.in).nextInt();
+			//アカウント番号を教えてもらう
+			if((int)account.get(Name)==accountnum2) {
+				System.out.println("いくら預け入れしますか？");
+				int inMoney=new java.util.Scanner(System.in).nextInt();
+				int getmoney=accountmoney.get(accountnum2);
+				int sumMoney=inMoney+getmoney;
+				accountmoney.remove(accountnum2);
+				accountmoney.put(accountnum2, sumMoney);
+				}
+		}
+		if(a==4) {
+			System.out.println("預金の引き出しを行います");
+			System.out.println("まず名前を教えてください");
+			Name=new java.util.Scanner(System.in).nextLine();
+			//アカウント番号抽出
+			System.out.println("あなたのアカウント番号を教えてください");
+			int accountnum3=new java.util.Scanner(System.in).nextInt();
+			//アカウント番号を教えてもらう
+			if((int)account.get(Name)==accountnum3) {
+				System.out.println("いくら引き出しますか？");
+				int outMoney=new java.util.Scanner(System.in).nextInt();
+				int money=accountmoney.get(accountnum3);
+				if(money>=outMoney) {
+				int pullMoney=money-outMoney;
+				accountmoney.remove(accountnum3);
+				accountmoney.put(accountnum3, pullMoney);
+				}else if(money<outMoney) {
+					System.out.println("引き出し金額が限度を超えています");
+				}
+				System.out.println("あなたの預金金額は"+money+"です");
+				
+				
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("何らかのエラーが発生");
+		}finally {
+		
+		return a;}
 	}
+	
+
 	
 	public static String getAccountName() {
 		return accountName;
